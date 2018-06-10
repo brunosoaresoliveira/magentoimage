@@ -19,7 +19,13 @@ RUN apt-get -qq update \
 RUN apt-get -qq update \
 		&& apt-get -qq -y install libapache2-mod-php7.1 php7.1-common php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd php7.1-xml php7.1-intl php7.1-mysql php7.1-cli php7.1-zip php7.1-curl php7.1-mcrypt php7.1-bcmath
 
-#RUN sed -i -e"s/^memory_limit\s*=\s*128M/memory_limit = 256M/" /etc/php/7.0/apache2/php.ini
+RUN sed -i 's,^memory_limit =.*$,memory_limit = 1024M,' /etc/php/7.1/apache2/php.ini \
+		&& sed -i 's,^file_uploads =.*$,file_uploads = On,' /etc/php/7.1/apache2/php.ini \
+		&& sed -i 's,^allow_url_fopen =.*$,allow_url_fopen = On,' /etc/php/7.1/apache2/php.ini \
+		&& sed -i 's,^upload_max_file_size =.*$,upload_max_file_size = 100M,' /etc/php/7.1/apache2/php.ini \
+		&& sed -i 's,^max_execution_time =.*$,max_execution_time = 18000,' /etc/php/7.1/apache2/php.ini \
+		&& sed -i 's,^max_input_time =.*$,max_input_time = 1800,' /etc/php/7.1/apache2/php.ini \
+		&& sed -i 's,^date.timezone =.*$,date.timezone = America/Chicago,' /etc/php/7.1/apache2/php.ini
 
 RUN a2enmod php7.1 \
 		&& a2enmod rewrite \
